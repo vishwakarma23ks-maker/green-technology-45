@@ -1,0 +1,56 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Institutions — GreenEdu Admin{% endblock %}
+
+{% block content %}
+<div class="welcome-banner">
+    <div>
+        <h1>🏫 Educational Institutions</h1>
+        <p>Manage schools, colleges, and universities in the network.</p>
+    </div>
+    <div class="illustration">🎓</div>
+</div>
+
+<div class="panel">
+    <div class="panel-header">
+        <h2>All Institutions ({{ institutions|length }})</h2>
+        <a href="#" class="view-all">+ Add New</a>
+    </div>
+
+    {% if institutions %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Location</th>
+                <th>Students</th>
+                <th>Green Score</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for inst in institutions %}
+            <tr>
+                <td><strong>🏫 {{ inst.name }}</strong></td>
+                <td><span class="badge active">{{ inst.type }}</span></td>
+                <td>📍 {{ inst.location }}</td>
+                <td>👥 {{ inst.students_count }}</td>
+                <td>
+                    <div style="display:flex; align-items:center; gap:0.5rem;">
+                        <div style="flex:1; background:#e8f5e9; height:6px; border-radius:3px; overflow:hidden; max-width:80px;">
+                            <div style="background:var(--green); height:100%; width:{{ inst.green_score }}%;"></div>
+                        </div>
+                        <span style="font-weight:600;">{{ inst.green_score }}</span>
+                    </div>
+                </td>
+                <td><span class="badge {{ 'active' if inst.status == 'Active' else 'inactive' }}">{{ inst.status }}</span></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="text-align:center; padding:3rem; color:#999;">No institutions registered yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

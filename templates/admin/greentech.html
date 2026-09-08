@@ -1,0 +1,40 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Green Tech — GreenEdu Admin{% endblock %}
+
+{% block content %}
+<div class="welcome-banner">
+    <div>
+        <h1>🌱 Green Technology</h1>
+        <p>Manage green technology categories and adoption data.</p>
+    </div>
+    <div class="illustration">🌿</div>
+</div>
+
+<div class="tech-grid">
+    {% for tech in techs %}
+    <div class="tech-card">
+        <div class="icon-circle">
+            {% if tech.icon == 'solar' %}☀️
+            {% elif tech.icon == 'bulb' %}💡
+            {% elif tech.icon == 'water' %}💧
+            {% elif tech.icon == 'recycle' %}♻️
+            {% elif tech.icon == 'leaf' %}🌱
+            {% elif tech.icon == 'wind' %}💨
+            {% elif tech.icon == 'ewaste' %}🗑️
+            {% else %}🌿
+            {% endif %}
+        </div>
+        <h3>{{ tech.name }}</h3>
+        <p>{{ tech.description }}</p>
+        <div style="margin:0.75rem 0;">
+            <div style="background:#e8f5e9; height:8px; border-radius:4px; overflow:hidden; margin-bottom:0.25rem;">
+                <div style="background:var(--green); height:100%; width:{{ tech.adoption_percent }}%;"></div>
+            </div>
+            <strong style="color:var(--green);">{{ tech.adoption_percent }}% Adoption</strong>
+        </div>
+        <div class="arrow">→</div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

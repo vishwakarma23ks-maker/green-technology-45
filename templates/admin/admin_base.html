@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin — GreenEdu{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+    <div style="position:fixed; top:80px; right:20px; z-index:999; max-width:380px;">
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+    </div>
+    {% endfor %}
+    {% endwith %}
+
+    <header class="admin-header">
+        <div class="left">
+            <button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+            <a href="{{ url_for('admin_dashboard') }}" class="logo">
+                <span class="logo-icon">🌱</span> GreenEdu
+            </a>
+        </div>
+        <div class="right">
+            <span class="bell-icon">🔔</span>
+            <a href="{{ url_for('logout') }}" class="user-pill" style="text-decoration:none; color:inherit;">
+                <span class="avatar">{{ session.get('username', 'A')[0]|upper }}</span>
+                <span>Hello, {{ session.get('username', 'Admin') }} ⌄</span>
+            </a>
+        </div>
+    </header>
+
+    <div class="admin-layout">
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="{{ url_for('admin_dashboard') }}" class="{% if request.endpoint == 'admin_dashboard' %}active{% endif %}"><span class="icon">🏠</span> Home</a></li>
+                <li><a href="{{ url_for('admin_survey') }}" class="{% if request.endpoint == 'admin_survey' %}active{% endif %}"><span class="icon">📋</span> Survey</a></li>
+                <li><a href="{{ url_for('admin_reports') }}" class="{% if request.endpoint == 'admin_reports' %}active{% endif %}"><span class="icon">📊</span> Reports</a></li>
+                <hr class="sidebar-divider">
+                <li><a href="{{ url_for('admin_institutions') }}" class="{% if request.endpoint == 'admin_institutions' %}active{% endif %}"><span class="icon">🏫</span> Institutions</a></li>
+                <li><a href="{{ url_for('admin_students') }}" class="{% if request.endpoint == 'admin_students' %}active{% endif %}"><span class="icon">👨‍🎓</span> Students</a></li>
+                <li><a href="{{ url_for('admin_greentech') }}" class="{% if request.endpoint == 'admin_greentech' %}active{% endif %}"><span class="icon">🌱</span> Green Tech</a></li>
+                <li><a href="{{ url_for('admin_energy') }}" class="{% if request.endpoint in ['admin_energy', 'admin_energy_delete'] %}active{% endif %}"><span class="icon">⚡</span> Energy Data</a></li>
+                <hr class="sidebar-divider">
+                <li><a href="{{ url_for('admin_settings') }}" class="{% if request.endpoint == 'admin_settings' %}active{% endif %}"><span class="icon">⚙️</span> Settings</a></li>
+                <li><a href="{{ url_for('home') }}"><span class="icon">🌐</span> View Site</a></li>
+                <li><a href="{{ url_for('logout') }}"><span class="icon">🚪</span> Logout</a></li>
+            </ul>
+        </aside>
+
+        <main class="admin-main">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <script>
+        setTimeout(function() {
+            document.querySelectorAll('.alert').forEach(function(a) {
+                a.style.opacity = '0';
+                a.style.transition = 'opacity 0.5s';
+                setTimeout(function() { a.remove(); }, 500);
+            });
+        }, 4000);
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

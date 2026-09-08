@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Take Survey — GreenEdu{% endblock %}
+
+{% block content %}
+<main>
+    <div class="survey-form">
+        <h2>🌿 Green Technology Awareness Survey</h2>
+        <p class="subtitle">Help us understand how educational institutions are adopting green technologies.</p>
+
+        <form method="POST" action="{{ url_for('survey') }}">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Your Name *</label>
+                    <input type="text" name="student_name" required placeholder="Full name">
+                </div>
+                <div class="form-group">
+                    <label>Institution</label>
+                    <input type="text" name="institution_name" placeholder="School or college name">
+                </div>
+            </div>
+
+            <h3 style="color:var(--green-dark); margin:1.5rem 0 1rem; font-size:1.1rem;">Rate the following (1 = Not Aware, 5 = Very Aware):</h3>
+
+            <div class="form-group">
+                <label>☀️ Solar Energy Awareness</label>
+                <select name="solar_energy" required>
+                    <option value="">-- Select --</option>
+                    <option value="1">1 - Not Aware</option>
+                    <option value="2">2 - Slightly Aware</option>
+                    <option value="3">3 - Moderately Aware</option>
+                    <option value="4">4 - Aware</option>
+                    <option value="5">5 - Very Aware</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>💡 Energy Saving Awareness</label>
+                <select name="energy_saving" required>
+                    <option value="">-- Select --</option>
+                    <option value="1">1 - Not Aware</option>
+                    <option value="2">2 - Slightly Aware</option>
+                    <option value="3">3 - Moderately Aware</option>
+                    <option value="4">4 - Aware</option>
+                    <option value="5">5 - Very Aware</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>💧 Water Conservation Awareness</label>
+                <select name="water_conservation" required>
+                    <option value="">-- Select --</option>
+                    <option value="1">1 - Not Aware</option>
+                    <option value="2">2 - Slightly Aware</option>
+                    <option value="3">3 - Moderately Aware</option>
+                    <option value="4">4 - Aware</option>
+                    <option value="5">5 - Very Aware</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>♻️ Waste Management Awareness</label>
+                <select name="waste_management" required>
+                    <option value="">-- Select --</option>
+                    <option value="1">1 - Not Aware</option>
+                    <option value="2">2 - Slightly Aware</option>
+                    <option value="3">3 - Moderately Aware</option>
+                    <option value="4">4 - Aware</option>
+                    <option value="5">5 - Very Aware</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Additional Comments (Optional)</label>
+                <textarea name="comments" placeholder="Share your thoughts on green technology in your institution..."></textarea>
+            </div>
+
+            <button type="submit" class="hero-btn" style="width:100%; border:none; cursor:pointer;">Submit Survey 🍃</button>
+        </form>
+    </div>
+</main>
+{% endblock %}

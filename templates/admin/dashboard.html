@@ -1,0 +1,171 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Dashboard — GreenEdu Admin{% endblock %}
+
+{% block content %}
+<div class="welcome-banner">
+    <div>
+        <h1>Hello, {{ session.get('username', 'Admin') }} 🍃</h1>
+        <p>Make a greener tomorrow through education and sustainable technology.</p>
+    </div>
+    <div class="illustration">🏫</div>
+</div>
+
+<!-- Stats -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon green">🏫</div>
+        <div class="stat-info">
+            <div class="number">{{ total_institutions }}</div>
+            <div class="label">Total Institutions</div>
+            <div class="sublabel">Registered Institutions</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon blue">👥</div>
+        <div class="stat-info">
+            <div class="number">{{ total_respondents }}</div>
+            <div class="label">Total Respondents</div>
+            <div class="sublabel">Completed Surveys</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon orange">🍃</div>
+        <div class="stat-info">
+            <div class="number">{{ green_tech_adoption }}%</div>
+            <div class="label">Green Tech Adoption</div>
+            <div class="sublabel">Overall Awareness</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon purple">📋</div>
+        <div class="stat-info">
+            <div class="number">{{ pending_surveys }}</div>
+            <div class="label">Pending Surveys</div>
+            <div class="sublabel">To Be Completed</div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity + Green Tech Overview -->
+<div class="panel-grid">
+    <div class="panel">
+        <div class="panel-header">
+            <h2>Recent Activity</h2>
+            <a href="#" class="view-all">View All →</a>
+        </div>
+        <ul class="activity-list">
+            {% for activity in activities %}
+            <li class="activity-item">
+                <div class="activity-icon {{ activity.icon_color or 'green' }}">
+                    {% if activity.icon == 'survey' %}📋
+                    {% elif activity.icon == 'report' %}📊
+                    {% elif activity.icon == 'solar' %}☀️
+                    {% elif activity.icon == 'building' %}🏫
+                    {% elif activity.icon == 'student' %}👨‍🎓
+                    {% else %}📌
+                    {% endif %}
+                </div>
+                <div class="activity-info">
+                    <div class="title">{{ activity.title }}</div>
+                    <div class="desc">{{ activity.description }}</div>
+                </div>
+                <div class="activity-time">
+                    {% set t = activity.created_at %}
+                    {% if t.hour == (t.hour|int) %}
+                        {{ t.strftime('%H:%M:%S') if t.hour >= 0 else 'Recently' }}
+                    {% endif %}
+                    {% if (t.day == 0) %}2 hours ago
+                    {% elif (t.hour == 4) %}4 hours ago
+                    {% elif (t.hour == 6) %}6 hours ago
+                    {% elif (t.day == 1) %}1 day ago
+                    {% else %}2 days ago
+                    {% endif %}
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="panel">
+        <div class="panel-header">
+            <h2>Green Technology Adoption Overview</h2>
+        </div>
+        <div class="donut-wrap">
+            <div class="donut" style="background:conic-gradient(var(--green) 0% {{ green_tech_adoption }}%, #e0e0e0 {{ green_tech_adoption }}% 100%);">
+                <div class="donut-text">
+                    <span class="num">{{ green_tech_adoption }}%</span>
+                    <span class="lbl">Awareness Rate</span>
+                </div>
+            </div>
+            <div class="tech-legend">
+                {% for tech in green_techs[:5] %}
+                <div class="row">
+                    <span class="dot"></span>
+                    <span class="name">{{ tech.name }}</span>
+                    <span class="pct">{{ tech.adoption_percent }}%</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Top Green Technologies -->
+<h2 style="font-size:1.25rem; color:var(--text); margin:1.5rem 0 1rem;">Top Green Technologies</h2>
+<div class="tech-grid">
+    {% for tech in top_techs %}
+    <div class="tech-card">
+        <div class="icon-circle">
+            {% if tech.icon == 'solar' %}☀️
+            {% elif tech.icon == 'bulb' %}💡
+            {% elif tech.icon == 'water' %}💧
+            {% elif tech.icon == 'recycle' %}♻️
+            {% elif tech.icon == 'leaf' %}🌱
+            {% elif tech.icon == 'wind' %}💨
+            {% elif tech.icon == 'ewaste' %}🗑️
+            {% else %}🌿
+            {% endif %}
+        </div>
+        <h3>{{ tech.name }}</h3>
+        <p>{{ tech.description }}</p>
+        <div class="arrow">→</div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Upcoming + Quote -->
+<div class="panel-grid" style="margin-top:1.5rem;">
+    <div class="panel">
+        <div class="panel-header">
+            <h2>Upcoming Activities</h2>
+            <a href="#" class="view-all">View All →</a>
+        </div>
+        <ul class="upcoming-list">
+            {% for event in upcoming_events %}
+            <li class="upcoming-item">
+                <div class="upcoming-date">
+                    <div class="month">{{ event.event_date.strftime('%b') }}</div>
+                    <div class="day">{{ event.event_date.strftime('%d') }}</div>
+                </div>
+                <div class="upcoming-info">
+                    <div class="title">{{ event.title }}</div>
+                    <div class="desc">{{ event.description }}</div>
+                    <div class="time">🕐 {{ event.event_time }}</div>
+                </div>
+                <span class="upcoming-status {{ event.status|lower }}">{{ event.status }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="panel">
+        <div class="quote-panel">
+            <div class="quote-icon">🍃</div>
+            <blockquote>"{{ quote.quote_text if quote else 'Greener campuses today, a sustainable future tomorrow.' }}"</blockquote>
+            <div class="author">— {{ quote.author if quote else 'A Greener Future Advocate' }}</div>
+            <div style="margin-top:1rem; font-size:0.85rem; color:#666;">Together we can make education more sustainable with green technology.</div>
+        </div>
+    </div>
+</div>
+{% endblock %}

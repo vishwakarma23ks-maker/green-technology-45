@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}GreenEdu — Green Technology Awareness{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+    <div style="position:fixed; top:90px; right:20px; z-index:999; max-width:380px;">
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+    </div>
+    {% endfor %}
+    {% endwith %}
+
+    <nav class="navbar">
+        <div class="nav-inner">
+            <a href="{{ url_for('home') }}" class="logo">
+                <span class="logo-icon">🌱</span> GreenEdu
+            </a>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('home') }}" class="{% if request.endpoint == 'home' %}active{% endif %}">Home</a></li>
+                <li><a href="{{ url_for('about') }}" class="{% if request.endpoint == 'about' %}active{% endif %}">About</a></li>
+                <li><a href="{{ url_for('survey') }}" class="{% if request.endpoint == 'survey' %}active{% endif %}">Survey</a></li>
+                {% if session.get('user_id') %}
+                <li><a href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                {% else %}
+                <li><a href="{{ url_for('login') }}" class="btn-outline">👤 Login</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    {% block content %}{% endblock %}
+
+    <footer>
+        <div class="logo">🌱 GreenEdu</div>
+        <p>&copy; {{ current_year }} GreenEdu. All rights reserved. | Building a sustainable future through education.</p>
+    </footer>
+
+    <script>
+        setTimeout(function() {
+            document.querySelectorAll('.alert').forEach(function(a) {
+                a.style.opacity = '0';
+                a.style.transition = 'opacity 0.5s';
+                setTimeout(function() { a.remove(); }, 500);
+            });
+        }, 4000);
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

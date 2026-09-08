@@ -1,0 +1,54 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Survey Management — GreenEdu Admin{% endblock %}
+
+{% block content %}
+<div class="welcome-banner">
+    <div>
+        <h1>📋 Survey Management</h1>
+        <p>View and manage all green technology awareness surveys submitted.</p>
+    </div>
+    <div class="illustration">📊</div>
+</div>
+
+<div class="panel">
+    <div class="panel-header">
+        <h2>All Survey Responses ({{ surveys|length }})</h2>
+    </div>
+
+    {% if surveys %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Institution</th>
+                <th>Solar</th>
+                <th>Energy</th>
+                <th>Water</th>
+                <th>Waste</th>
+                <th>Level</th>
+                <th>Status</th>
+                <th>Submitted</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in surveys %}
+            <tr>
+                <td><strong>{{ s.student_name }}</strong></td>
+                <td>{{ s.institution_name or 'N/A' }}</td>
+                <td>☀️ {{ s.solar_energy }}/5</td>
+                <td>💡 {{ s.energy_saving }}/5</td>
+                <td>💧 {{ s.water_conservation }}/5</td>
+                <td>♻️ {{ s.waste_management }}/5</td>
+                <td><span class="badge {{ s.awareness_level|lower }}">{{ s.awareness_level }}</span></td>
+                <td><span class="badge {{ s.status|lower }}">{{ s.status }}</span></td>
+                <td>{{ s.submitted_at.strftime('%b %d, %Y') }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="text-align:center; padding:3rem; color:#999;">No surveys submitted yet. <a href="{{ url_for('survey') }}">Take a survey</a> to see it here.</p>
+    {% endif %}
+</div>
+{% endblock %}

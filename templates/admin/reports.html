@@ -1,0 +1,72 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Reports — GreenEdu Admin{% endblock %}
+
+{% block content %}
+<div class="welcome-banner">
+    <div>
+        <h1>📊 Reports & Analytics</h1>
+        <p>Insights on green technology adoption across institutions.</p>
+    </div>
+    <div class="illustration">📈</div>
+</div>
+
+<div class="panel">
+    <div class="panel-header">
+        <h2>Green Technology Adoption Stats</h2>
+    </div>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Technology</th>
+                <th>Adoption %</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tech in techs %}
+            <tr>
+                <td><strong>{{ tech.name }}</strong></td>
+                <td>
+                    <div style="background:#e8f5e9; height:8px; border-radius:4px; overflow:hidden; margin-bottom:0.25rem;">
+                        <div style="background:var(--green); height:100%; width:{{ tech.adoption_percent }}%;"></div>
+                    </div>
+                    <span style="font-weight:600; color:var(--green);">{{ tech.adoption_percent }}%</span>
+                </td>
+                <td style="color:#666;">{{ tech.description }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="panel">
+    <div class="panel-header">
+        <h2>Top Institutions by Green Score</h2>
+    </div>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Institution</th>
+                <th>Type</th>
+                <th>Location</th>
+                <th>Students</th>
+                <th>Green Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for inst in institutions[:10] %}
+            <tr>
+                <td><strong>#{{ loop.index }}</strong></td>
+                <td>{{ inst.name }}</td>
+                <td><span class="badge active">{{ inst.type }}</span></td>
+                <td>{{ inst.location }}</td>
+                <td>{{ inst.students_count }}</td>
+                <td><span class="badge {{ 'high' if inst.green_score >= 75 else 'medium' if inst.green_score >= 50 else 'low' }}">{{ inst.green_score }}/100</span></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

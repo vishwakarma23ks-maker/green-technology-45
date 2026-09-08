@@ -1,0 +1,51 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Students — GreenEdu Admin{% endblock %}
+
+{% block content %}
+<div class="welcome-banner">
+    <div>
+        <h1>👨‍🎓 Students</h1>
+        <p>View student data and awareness scores.</p>
+    </div>
+    <div class="illustration">📚</div>
+</div>
+
+<div class="panel">
+    <div class="panel-header">
+        <h2>Registered Students ({{ students|length }})</h2>
+        <a href="#" class="view-all">+ Add Student</a>
+    </div>
+
+    {% if students %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Institution</th>
+                <th>Grade</th>
+                <th>Awareness Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td><strong>👨‍🎓 {{ student.name }}</strong></td>
+                <td>{{ student.email or 'N/A' }}</td>
+                <td>{{ student.institution_name or 'N/A' }}</td>
+                <td>{{ student.grade or 'N/A' }}</td>
+                <td>
+                    <span class="badge {{ 'high' if student.awareness_score >= 75 else 'medium' if student.awareness_score >= 50 else 'low' }}">
+                        {{ student.awareness_score }}/100
+                    </span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="text-align:center; padding:3rem; color:#999;">No students registered yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

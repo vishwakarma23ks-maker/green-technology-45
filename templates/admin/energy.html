@@ -1,0 +1,172 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Energy Data — GreenEdu Admin{% endblock %}
+
+{% block content %}
+<div class="welcome-banner">
+    <div>
+        <h1>⚡ College Energy Resources Data</h1>
+        <p>Manage all colleges' energy, water, and waste data.</p>
+    </div>
+    <div class="illustration">🏫</div>
+</div>
+
+<!-- Stats -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon green">🏫</div>
+        <div class="stat-info">
+            <div class="number">{{ total_records }}</div>
+            <div class="label">Total Records</div>
+            <div class="sublabel">Colleges reporting</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon blue">🌱</div>
+        <div class="stat-info">
+            <div class="number">{{ avg_score }}/100</div>
+            <div class="label">Avg Green Score</div>
+            <div class="sublabel">Overall adoption</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon orange">⚡</div>
+        <div class="stat-info">
+            <div class="number">{{ "{:,.0f}".format(total_renewable) }} kWh</div>
+            <div class="label">Renewable Energy</div>
+            <div class="sublabel">Solar + Wind total</div>
+        </div>
+    </div>
+</div>
+
+<!-- Add / Edit Form -->
+<div class="panel">
+    <div class="panel-header">
+        <h2>{% if edit_record %}✏️ Edit Record: {{ edit_record.college_name }}{% else %}➕ Add New Energy Record{% endif %}</h2>
+    </div>
+
+    <form method="POST" action="{{ url_for('admin_energy') }}" class="energy-form">
+        {% if edit_record %}<input type="hidden" name="edit_id" value="{{ edit_record.id }}">{% endif %}
+        <div class="form-grid">
+            <h3>🏫 College Information</h3>
+            <div class="fg">
+                <label>College Name *</label>
+                <input type="text" name="college_name" required value="{{ edit_record.college_name if edit_record else '' }}" placeholder="e.g., Green Valley Public School">
+            </div>
+            <div class="fg">
+                <label>Location</label>
+                <input type="text" name="location" value="{{ edit_record.location if edit_record else '' }}" placeholder="City, State">
+            </div>
+            <div class="fg">
+                <label>Contact Person</label>
+                <input type="text" name="contact_person" value="{{ edit_record.contact_person if edit_record else '' }}" placeholder="Name">
+            </div>
+            <div class="fg">
+                <label>Contact Email</label>
+                <input type="email" name="contact_email" value="{{ edit_record.contact_email if edit_record else '' }}" placeholder="email@college.edu">
+            </div>
+            <div class="fg">
+                <label>Student Count</label>
+                <input type="number" name="student_count" min="0" value="{{ edit_record.student_count if edit_record else '' }}" placeholder="0">
+            </div>
+
+            <h3>⚡ Energy Usage (Monthly)</h3>
+            <div class="fg">
+                <label>☀️ Solar (kWh)</label>
+                <input type="number" step="0.01" min="0" name="solar_kwh" value="{{ edit_record.solar_kwh if edit_record else '0' }}">
+            </div>
+            <div class="fg">
+                <label>💨 Wind (kWh)</label>
+                <input type="number" step="0.01" min="0" name="wind_kwh" value="{{ edit_record.wind_kwh if edit_record else '0' }}">
+            </div>
+            <div class="fg">
+                <label>🔌 Grid (kWh)</label>
+                <input type="number" step="0.01" min="0" name="grid_kwh" value="{{ edit_record.grid_kwh if edit_record else '0' }}">
+            </div>
+            <div class="fg">
+                <label>⛽ Diesel (L)</label>
+                <input type="number" step="0.01" min="0" name="diesel_liters" value="{{ edit_record.diesel_liters if edit_record else '0' }}">
+            </div>
+
+            <h3>💧 Water &amp; ♻️ Waste</h3>
+            <div class="fg">
+                <label>💧 Water (L/day)</label>
+                <input type="number" step="0.01" min="0" name="water_liters_per_day" value="{{ edit_record.water_liters_per_day if edit_record else '0' }}">
+            </div>
+            <div class="fg">
+                <label>♻️ Recycled (kg/week)</label>
+                <input type="number" step="0.01" min="0" name="waste_recycled_kg" value="{{ edit_record.waste_recycled_kg if edit_record else '0' }}">
+            </div>
+            <div class="fg" style="grid-column:1/-1;">
+                <label>Notes</label>
+                <textarea name="notes" placeholder="Any green initiatives...">{{ edit_record.notes if edit_record else '' }}</textarea>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">{% if edit_record %}💾 Update{% else %}➕ Add Record{% endif %}</button>
+                {% if edit_record %}<a href="{{ url_for('admin_energy') }}" class="btn-secondary">Cancel</a>{% endif %}
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Records Table -->
+<div class="panel">
+    <div class="panel-header">
+        <h2>📋 All College Energy Records ({{ records|length }})</h2>
+    </div>
+
+    {% if records %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>College</th>
+                <th>Location</th>
+                <th>Students</th>
+                <th>☀️ Solar</th>
+                <th>💨 Wind</th>
+                <th>💧 Water</th>
+                <th>♻️ Recycled</th>
+                <th>Green Score</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in records %}
+            <tr>
+                <td>
+                    <strong>🏫 {{ r.college_name }}</strong>
+                    {% if r.contact_person %}<br><span style="font-size:0.8rem; color:#888;">{{ r.contact_person }}</span>{% endif %}
+                </td>
+                <td>{{ r.location or '-' }}</td>
+                <td>{{ r.student_count or 0 }}</td>
+                <td>{{ "{:,.0f}".format(r.solar_kwh) }} kWh</td>
+                <td>{{ "{:,.0f}".format(r.wind_kwh) }} kWh</td>
+                <td>{{ "{:,.0f}".format(r.water_liters_per_day) }} L</td>
+                <td>{{ "{:,.0f}".format(r.waste_recycled_kg) }} kg</td>
+                <td>
+                    <div class="score-cell">
+                        {% if r.green_score >= 75 %}
+                        <span class="pill high">{{ r.green_score }}/100</span>
+                        {% elif r.green_score >= 50 %}
+                        <span class="pill medium">{{ r.green_score }}/100</span>
+                        {% else %}
+                        <span class="pill low">{{ r.green_score }}/100</span>
+                        {% endif %}
+                    </div>
+                </td>
+                <td>
+                    <a href="{{ url_for('admin_energy', edit=r.id) }}" class="btn-primary" style="text-decoration:none; font-size:0.75rem; padding:0.3rem 0.7rem; display:inline-block; margin-bottom:0.25rem;">✏️ Edit</a>
+                    <form method="POST" action="{{ url_for('admin_energy_delete', record_id=r.id) }}" style="display:inline;" onsubmit="return confirm('Delete this record?');">
+                        <button type="submit" style="background:#d32f2f; color:#fff; border:none; padding:0.3rem 0.7rem; border-radius:6px; cursor:pointer; font-size:0.75rem;">🗑️</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="text-align:center; padding:3rem; color:#999;">No energy records yet. Add one using the form above.</p>
+    {% endif %}
+</div>
+{% endblock %}

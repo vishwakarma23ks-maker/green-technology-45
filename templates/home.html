@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}GreenEdu — Green Technology Awareness in Education{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-inner">
+        <span class="hero-tag">🌿 Greener Campuses &nbsp;|&nbsp; Brighter Future</span>
+        <h1>Awareness of <span>Green Technology</span> Adoption in Educational Institutions</h1>
+        <p>Explore how schools and colleges are using green technologies like solar energy, energy saving, water conservation and more for a sustainable tomorrow.</p>
+        <a href="{{ url_for('survey') }}" class="hero-btn">🍃 Take the Survey →</a>
+    </div>
+</section>
+
+<section class="features">
+    <div class="features-grid">
+        <div class="feature-card">
+            <span class="icon">☀️</span>
+            <h3>Solar Energy</h3>
+            <p>Clean renewable power</p>
+        </div>
+        <div class="feature-card">
+            <span class="icon">💡</span>
+            <h3>Energy Saving</h3>
+            <p>Smart efficient systems</p>
+        </div>
+        <div class="feature-card">
+            <span class="icon">💧</span>
+            <h3>Water Conservation</h3>
+            <p>Harvest &amp; reuse water</p>
+        </div>
+        <div class="feature-card">
+            <span class="icon">🌱</span>
+            <h3>Sustainable Campus</h3>
+            <p>Eco-friendly buildings</p>
+        </div>
+    </div>
+</section>
+
+<main>
+    <div class="section-header">
+        <h2>Why Green Technology in Education?</h2>
+    </div>
+
+    <div class="about-section">
+        <div class="about-inner">
+            <div>
+                <span class="label">About GreenEdu</span>
+                <h2>Building a <span>Greener Tomorrow</span></h2>
+                <p>GreenEdu is dedicated to promoting the adoption of green technology in educational institutions. We help schools and colleges measure, improve, and showcase their sustainability efforts.</p>
+                <p>Our platform enables researchers, students, and institutions to collaborate on building environmentally responsible campuses through surveys, reports, and shared best practices.</p>
+
+                <div class="about-card">
+                    <div class="icon-box">🌍</div>
+                    <div>
+                        <h3>Environmental Awareness</h3>
+                        <p>Promoting sustainable practices in education.</p>
+                    </div>
+                </div>
+                <div class="about-card">
+                    <div class="icon-box">🎓</div>
+                    <div>
+                        <h3>Education &amp; Sustainability</h3>
+                        <p>Supporting cleaner, smarter institutions.</p>
+                    </div>
+                </div>
+                <div class="about-card">
+                    <div class="icon-box">📊</div>
+                    <div>
+                        <h3>Research &amp; Impact</h3>
+                        <p>Learning and finding solutions for a greener future.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="about-illustration">
+                <div style="text-align:center; font-size:8rem;">🌳☀️🌱</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="quote-box">
+        <blockquote>"Green technology in education is not just a choice, it's a responsibility for a better tomorrow."</blockquote>
+        <div class="author">— A Greener Future Advocate 🍃</div>
+    </div>
+</main>
+{% endblock %}

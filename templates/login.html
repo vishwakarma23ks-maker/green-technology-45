@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Login — GreenEdu{% endblock %}
+
+{% block content %}
+<main style="max-width:500px;">
+    <div style="background:#fff; border-radius:16px; padding:3rem; box-shadow:0 4px 20px rgba(46,125,50,0.1); margin-top:2rem;">
+        <div style="text-align:center; margin-bottom:2rem;">
+            <div style="font-size:3rem; margin-bottom:0.5rem;">🔐</div>
+            <h2 style="color:var(--green-dark); font-size:1.75rem;">Welcome Back</h2>
+            <p style="color:#666;">Sign in to your GreenEdu account</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('login') }}">
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" name="email" required placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" required placeholder="Enter your password">
+            </div>
+            <button type="submit" class="hero-btn" style="width:100%; border:none; cursor:pointer; font-size:1rem;">Login</button>
+        </form>
+
+        <p style="text-align:center; margin-top:1.5rem; color:#666;">
+            Don't have an account? <a href="{{ url_for('register') }}">Register here</a>
+        </p>
+    </div>
+</main>
+{% endblock %}
