@@ -1,5 +1,4 @@
 Flask==3.0.0
-Flask-MySQLdb==2.0.0
 PyMySQL
 bcrypt==4.1.2
 Werkzeug==3.0.1
